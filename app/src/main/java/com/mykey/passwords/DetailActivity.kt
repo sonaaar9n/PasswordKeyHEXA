@@ -1,7 +1,4 @@
-Are yaar, galti se ek spelling ki typo ho gayi hai! Code mein TYPE_TEXT_FLAG_NO_SUGGESTions likh gaya hai jisme 'g' aur 'ions' chote aakhar (lowercase) ho gaye hain, jabki Android mein saare letters bade hote hain. Isse Android Studio mein red error aa gaya hoga.
-Isko theek karne ke liye bas niche diye gaye pure code ko copy karke apne DetailActivity.kt mein paste kar lo, error turant gayab ho jayegi:
-```kotlin
-package com.mykey.passwords
+Package com.mykey.passwords
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -28,15 +25,6 @@ class DetailActivity : Activity() {
     // Har password field ke liye alag hide/show state. Shuru me sab VISIBLE.
     private val hidden = HashMap<String, Boolean>()
 
-    // --- Apple iOS Dark Theme Color Palette ---
-    private val COLOR_BG = Color.parseColor("#000000")        // OLED Pure Black
-    private val COLOR_CARD_BG = Color.parseColor("#1c1c1e")   // iOS Dark Gray Surface
-    private val COLOR_BORDER = Color.parseColor("#38383a")    // Subtle Border
-    private val COLOR_TEXT_PRIMARY = Color.parseColor("#f5f5f7") // Off-White
-    private val COLOR_TEXT_SECONDARY = Color.parseColor("#86868b") // Muted Gray
-    private val COLOR_ACCENT = Color.parseColor("#0a84ff")    // iOS Blue
-    private val COLOR_BUTTON_BG = Color.parseColor("#2c2c2e") // Secondary Button Gray
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         db = Db(this)
@@ -44,12 +32,9 @@ class DetailActivity : Activity() {
 
         root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(dp(16), dp(16), dp(16), dp(32))
-            setBackgroundColor(COLOR_BG)
+            setPadding(dp(16), dp(12), dp(16), dp(32))
         }
-        val sv = ScrollView(this).apply {
-            setBackgroundColor(COLOR_BG)
-        }
+        val sv = ScrollView(this)
         sv.addView(root)
         setContentView(sv)
     }
@@ -81,44 +66,39 @@ class DetailActivity : Activity() {
     private fun block(title: String, value: String, dateText: String, key: String?) {
         val card = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setBackgroundColor(COLOR_CARD_BG)
-            setPadding(dp(16), dp(14), dp(16), dp(14))
+            setBackgroundColor(Color.parseColor("#ECEFF1"))
+            setPadding(dp(14), dp(12), dp(14), dp(12))
         }
         val lp = LinearLayout.LayoutParams(-1, -2)
-        lp.topMargin = dp(14)
+        lp.topMargin = dp(16)
         card.layoutParams = lp
 
         card.addView(TextView(this).apply {
             text = title
             textSize = 12f
             setTypeface(null, Typeface.BOLD)
-            setTextColor(COLOR_TEXT_SECONDARY)
+            setTextColor(Color.parseColor("#546E7A"))
         })
 
         val valueView = TextView(this).apply {
             text = if (value.isEmpty()) "-" else value
-            textSize = 18f
-            setTextColor(COLOR_TEXT_PRIMARY)
+            textSize = 20f
+            setTextColor(Color.BLACK)
             setTextIsSelectable(true)
-            setPadding(0, dp(6), 0, dp(4))
+            setPadding(0, dp(6), 0, dp(2))
         }
         card.addView(valueView)
 
         card.addView(TextView(this).apply {
             text = dateText
-            textSize = 12f
-            setTextColor(COLOR_TEXT_SECONDARY)
+            textSize = 13f
+            setTextColor(Color.DKGRAY)
         })
 
-        val buttons = LinearLayout(this).apply { 
-            orientation = LinearLayout.HORIZONTAL
-            setPadding(0, dp(10), 0, 0)
-        }
+        val buttons = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
 
         val copy = Button(this).apply {
             text = "Copy"
-            setTextColor(COLOR_ACCENT)
-            setBackgroundColor(COLOR_BUTTON_BG)
             setOnClickListener {
                 if (value.isEmpty()) {
                     toast("Copy karne ke liye kuch nahi hai")
@@ -129,13 +109,10 @@ class DetailActivity : Activity() {
                 }
             }
         }
-        buttons.addView(copy, LinearLayout.LayoutParams(0, dp(40), 1f).apply { rightMargin = dp(6) })
+        buttons.addView(copy, LinearLayout.LayoutParams(0, dp(48), 1f))
 
         if (key != null) {
-            val eye = Button(this).apply {
-                setTextColor(COLOR_TEXT_PRIMARY)
-                setBackgroundColor(COLOR_BUTTON_BG)
-            }
+            val eye = Button(this)
             fun refreshEye() {
                 val h = hidden[key] == true
                 valueView.transformationMethod = if (h) PasswordTransformationMethod.getInstance() else null
@@ -146,18 +123,13 @@ class DetailActivity : Activity() {
                 refreshEye()
             }
             refreshEye()
-            buttons.addView(eye, LinearLayout.LayoutParams(0, dp(40), 1f).apply { 
-                rightMargin = dp(6) 
-                leftMargin = dp(6) 
-            })
+            buttons.addView(eye, LinearLayout.LayoutParams(0, dp(48), 1f))
 
             val fix = Button(this).apply {
                 text = "Fix"
-                setTextColor(COLOR_TEXT_PRIMARY)
-                setBackgroundColor(COLOR_BUTTON_BG)
                 setOnClickListener { fixDialog(key, title, value) }
             }
-            buttons.addView(fix, LinearLayout.LayoutParams(0, dp(40), 1f).apply { leftMargin = dp(6) })
+            buttons.addView(fix, LinearLayout.LayoutParams(0, dp(48), 1f))
         }
         card.addView(buttons)
         root.addView(card)
@@ -166,14 +138,10 @@ class DetailActivity : Activity() {
     private fun bigButton(text: String, onClick: () -> Unit) {
         val b = Button(this).apply {
             this.text = text
-            textSize = 15f
-            setTextColor(Color.WHITE)
-            setBackgroundColor(COLOR_ACCENT)
+            textSize = 16f
             setOnClickListener { onClick() }
         }
-        val lp = LinearLayout.LayoutParams(-1, dp(48))
-        lp.topMargin = dp(14)
-        root.addView(b, lp)
+        root.addView(b, LinearLayout.LayoutParams(-1, dp(52)))
     }
 
     /** Galat likha password sudharna: history shift nahi hoti, date wahi rehti hai. */
@@ -182,8 +150,7 @@ class DetailActivity : Activity() {
             setText(oldValue)
             setSelection(oldValue.length)
             inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
-            setPadding(dp(16), dp(14), dp(16), dp(14))
-            setTextColor(Color.BLACK)
+            setPadding(dp(20), dp(16), dp(20), dp(16))
         }
         AlertDialog.Builder(this)
             .setTitle("Fix: $fieldTitle")
@@ -202,8 +169,7 @@ class DetailActivity : Activity() {
         val input = EditText(this).apply {
             hint = "Naya password"
             inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
-            setPadding(dp(16), dp(14), dp(16), dp(14))
-            setTextColor(Color.BLACK)
+            setPadding(dp(20), dp(16), dp(20), dp(16))
         }
         AlertDialog.Builder(this)
             .setTitle("Edit Password")
@@ -232,13 +198,11 @@ class DetailActivity : Activity() {
             hint = "Label (jaise Instagram 1)"
             setText(a.label)
             inputType = InputType.TYPE_CLASS_TEXT
-            setTextColor(Color.BLACK)
         }
         val user = EditText(this).apply {
             hint = "Username / Email / Phone"
             setText(a.username)
             inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
-            setTextColor(Color.BLACK)
         }
         box.addView(label)
         box.addView(user)
@@ -255,6 +219,3 @@ class DetailActivity : Activity() {
             .show()
     }
 }
-
-```
-Ab isse paste karke check karo, error bilkul theek ho jayegi!
