@@ -1,3 +1,6 @@
+Are yaar, galti se ek spelling ki typo ho gayi hai! Code mein TYPE_TEXT_FLAG_NO_SUGGESTions likh gaya hai jisme 'g' aur 'ions' chote aakhar (lowercase) ho gaye hain, jabki Android mein saare letters bade hote hain. Isse Android Studio mein red error aa gaya hoga.
+Isko theek karne ke liye bas niche diye gaye pure code ko copy karke apne DetailActivity.kt mein paste kar lo, error turant gayab ho jayegi:
+```kotlin
 package com.mykey.passwords
 
 import android.app.Activity
@@ -234,7 +237,7 @@ class DetailActivity : Activity() {
         val user = EditText(this).apply {
             hint = "Username / Email / Phone"
             setText(a.username)
-            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_NO_SUGGESTions
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
             setTextColor(Color.BLACK)
         }
         box.addView(label)
@@ -252,3 +255,6 @@ class DetailActivity : Activity() {
             .show()
     }
 }
+
+```
+Ab isse paste karke check karo, error bilkul theek ho jayegi!
