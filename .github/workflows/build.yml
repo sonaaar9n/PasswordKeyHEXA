@@ -19,6 +19,11 @@ jobs:
         with:
           gradle-version: 8.2
 
+      - name: Add app icon
+        run: |
+          mkdir -p app/src/main/res/drawable
+          cp icon.png app/src/main/res/drawable/ic_launcher.png
+
       - name: Build debug APK
         run: gradle assembleDebug --no-daemon
 
