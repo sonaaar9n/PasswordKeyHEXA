@@ -67,4 +67,6 @@ I'm not a full-stack developer, and this is a learning project. Suggestions, iss
 
 ## 📄 License
 
-No license has been added yet. Until one is added, all rights are reserved by the author.
+## 📄 License
+
+Released under the [MIT License](LICENSE). Copyright (c) 2026 Shivam Soni. 
