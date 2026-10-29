@@ -33,10 +33,9 @@ This app is **personal-use by design**. It deliberately has no encryption layer.
 
 What this means:
 
-- ✅ Your data never leaves your phone, because the app cannot access the internet.
-- ⚠️ Data is stored **unencrypted** on the device. A rooted phone, malware with storage access, or a device backup could expose it.
-- ⚠️ This is a debug build, intended for personal use and learning, not a hardened password vault.
+## 🛡️ Security
 
+Personal-use app by design: fully offline, no encryption. Your data stays on your phone and is protected by your phone's screen lock and app lock. Exported Excel/PDF files are not encrypted either, so keep them safe. 
 If you need strong protection, use a well-audited password manager. If you want something simple and private for yourself, this might be enough for you.
 
 ## 🔒 Permissions
