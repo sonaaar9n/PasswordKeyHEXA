@@ -1,37 +1,50 @@
+package com.mykey.passwords
+
+import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
-import android.text.InputType
-import android.text.method.PasswordTransformationMethod
+import android.view.Gravity
+import android.view.View
 import android.widget.Button
-import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
-class DetailActivity : Activity() {
+class MainActivity : Activity() {
 
     private lateinit var db: Db
-    private lateinit var root: LinearLayout
-    private var id = 0L
-
-    // Har password field ke liye alag hide/show state. Shuru me sab VISIBLE.
-    private val hidden = HashMap<String, Boolean>()
+    private lateinit var list: LinearLayout
+    private var pendingBackup = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         db = Db(this)
-        id = intent.getLongExtra("id", 0L)
+        title = "Password Key"
 
-        root = LinearLayout(this).apply {
+        val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(dp(16), dp(12), dp(16), dp(32))
+            setPadding(dp(12), dp(12), dp(12), dp(24))
         }
+
+        val backupBtn = Button(this).apply {
+            text = "Backup (Excel / PDF)"
+            textSize = 16f
+            setOnClickListener { chooseBackup() }
+        }
+        root.addView(backupBtn, LinearLayout.LayoutParams(-1, dp(56)))
+
+        list = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        root.addView(list)
+
         val sv = ScrollView(this)
         sv.addView(root)
         setContentView(sv)
@@ -43,177 +56,104 @@ class DetailActivity : Activity() {
     }
 
     private fun render() {
-        root.removeAllViews()
-        val a = db.get(id) ?: run { finish(); return }
-        title = a.label
-
-        // Username / Email / Phone
-        block("USERNAME / EMAIL / PHONE", a.username, "Last changed: ${fmtDate(a.usernameDate)}", null)
-        bigButton("Edit Username / Label") { editUsernameDialog(a) }
-
-        // Current password
-        block("CURRENT PASSWORD", a.cur, "Last changed: ${fmtDate(a.curDate)}", "cur")
-        bigButton("Edit Password") { editPasswordDialog() }
-
-        // History
-        block("PREVIOUS PASSWORD 1", a.p1, "Changed on: ${fmtDate(a.p1Date)}", "p1")
-        block("PREVIOUS PASSWORD 2", a.p2, "Changed on: ${fmtDate(a.p2Date)}", "p2")
+        list.removeAllViews()
+        var lastPlatform = ""
+        for (a in db.all()) {
+            if (a.platform != lastPlatform) {
+                lastPlatform = a.platform
+                val h = TextView(this).apply {
+                    text = a.platform.uppercase()
+                    textSize = 15f
+                    setTypeface(null, Typeface.BOLD)
+                    setTextColor(Color.parseColor("#37474F"))
+                    setPadding(dp(4), dp(20), 0, dp(6))
+                }
+                list.addView(h)
+            }
+            list.addView(row(a))
+        }
     }
 
-    /** Ek field ka card: title, value, date, Copy button aur (password ho to) Hide/Show button. */
-    private fun block(title: String, value: String, dateText: String, key: String?) {
-        val card = LinearLayout(this).apply {
+    private fun row(a: Account): View {
+        val box = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setBackgroundColor(Color.parseColor("#ECEFF1"))
             setPadding(dp(14), dp(12), dp(14), dp(12))
+            gravity = Gravity.CENTER_VERTICAL
+        }
+        val name = TextView(this).apply {
+            text = a.label
+            textSize = 18f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(Color.BLACK)
+        }
+        val user = TextView(this).apply {
+            text = if (a.username.isEmpty()) "(username set nahi)" else a.username
+            textSize = 14f
+            setTextColor(Color.DKGRAY)
+        }
+        box.addView(name)
+        box.addView(user)
+        box.setOnClickListener {
+            startActivity(Intent(this, DetailActivity::class.java).putExtra("id", a.id))
         }
         val lp = LinearLayout.LayoutParams(-1, -2)
-        lp.topMargin = dp(16)
-        card.layoutParams = lp
+        lp.bottomMargin = dp(6)
+        box.layoutParams = lp
+        return box
+    }
 
-        card.addView(TextView(this).apply {
-            text = title
-            textSize = 12f
-            setTypeface(null, Typeface.BOLD)
-            setTextColor(Color.parseColor("#546E7A"))
-        })
+    // ---------- Backup ----------
 
-        val valueView = TextView(this).apply {
-            text = if (value.isEmpty()) "-" else value
-            textSize = 20f
-            setTextColor(Color.BLACK)
-            setTextIsSelectable(true)
-            setPadding(0, dp(6), 0, dp(2))
+    private fun chooseBackup() {
+        AlertDialog.Builder(this)
+            .setTitle("Backup kaise save karu?")
+            .setItems(arrayOf("Excel (.xlsx)", "PDF")) { _, which -> startBackup(which) }
+            .show()
+    }
+
+    private fun startBackup(kind: Int) {
+        if (Build.VERSION.SDK_INT < 29 &&
+            checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+        ) {
+            pendingBackup = kind
+            requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+            return
         }
-        card.addView(valueView)
+        doBackup(kind)
+    }
 
-        card.addView(TextView(this).apply {
-            text = dateText
-            textSize = 13f
-            setTextColor(Color.DKGRAY)
-        })
+    override fun onRequestPermissionsResult(code: Int, perms: Array<out String>, results: IntArray) {
+        super.onRequestPermissionsResult(code, perms, results)
+        if (code == 1 && results.isNotEmpty() && results[0] == PackageManager.PERMISSION_GRANTED && pendingBackup >= 0) {
+            doBackup(pendingBackup)
+        } else if (code == 1) {
+            toast("Storage permission nahi mili, backup nahi ban saka")
+        }
+        pendingBackup = -1
+    }
 
-        val buttons = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
-
-        val copy = Button(this).apply {
-            text = "Copy"
-            setOnClickListener {
-                if (value.isEmpty()) {
-                    toast("Copy karne ke liye kuch nahi hai")
-                } else {
-                    val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    cm.setPrimaryClip(ClipData.newPlainText("key", value))
-                    toast("Copied")
+    private fun doBackup(kind: Int) {
+        try {
+            val accounts = db.all()
+            val stamp = SimpleDateFormat("yyyy-MM-dd_HH-mm", Locale.US).format(Date())
+            val path = if (kind == 0) {
+                Exporter.save(this, "passwords_backup_$stamp.xlsx",
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+                    Exporter.xlsx(accounts, it)
+                }
+            } else {
+                Exporter.save(this, "passwords_backup_$stamp.pdf", "application/pdf") {
+                    Exporter.pdf(accounts, it)
                 }
             }
+            AlertDialog.Builder(this)
+                .setTitle("Backup ban gaya")
+                .setMessage("Yahan save hua:\n$path")
+                .setPositiveButton("OK", null)
+                .show()
+        } catch (e: Exception) {
+            toast("Backup fail: ${e.message}")
         }
-        buttons.addView(copy, LinearLayout.LayoutParams(0, dp(48), 1f))
-
-        if (key != null) {
-            val eye = Button(this)
-            fun refreshEye() {
-                val h = hidden[key] == true
-                valueView.transformationMethod = if (h) PasswordTransformationMethod.getInstance() else null
-                eye.text = if (h) "Show" else "Hide"
-            }
-            eye.setOnClickListener {
-                hidden[key] = !(hidden[key] == true)
-                refreshEye()
-            }
-            refreshEye()
-            buttons.addView(eye, LinearLayout.LayoutParams(0, dp(48), 1f))
-
-            val fix = Button(this).apply {
-                text = "Fix"
-                setOnClickListener { fixDialog(key, title, value) }
-            }
-            buttons.addView(fix, LinearLayout.LayoutParams(0, dp(48), 1f))
-        }
-        card.addView(buttons)
-        root.addView(card)
-    }
-
-    private fun bigButton(text: String, onClick: () -> Unit) {
-        val b = Button(this).apply {
-            this.text = text
-            textSize = 16f
-            setOnClickListener { onClick() }
-        }
-        root.addView(b, LinearLayout.LayoutParams(-1, dp(52)))
-    }
-
-    /** Galat likha password sudharna: history shift nahi hoti, date wahi rehti hai. */
-    private fun fixDialog(key: String, fieldTitle: String, oldValue: String) {
-        val input = EditText(this).apply {
-            setText(oldValue)
-            setSelection(oldValue.length)
-            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
-            setPadding(dp(20), dp(16), dp(20), dp(16))
-        }
-        AlertDialog.Builder(this)
-            .setTitle("Fix: $fieldTitle")
-            .setMessage("Sirf galti sudharne ke liye. Date aur history waisi hi rahegi.")
-            .setView(input)
-            .setPositiveButton("Save") { _, _ ->
-                db.fixPassword(id, key, input.text.toString())
-                toast("Sudhar diya")
-                render()
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
-    }
-
-    private fun editPasswordDialog() {
-        val input = EditText(this).apply {
-            hint = "Naya password"
-            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
-            setPadding(dp(20), dp(16), dp(20), dp(16))
-        }
-        AlertDialog.Builder(this)
-            .setTitle("Edit Password")
-            .setMessage("Purana current password, Previous 1 ban jayega aur Previous 1, Previous 2.")
-            .setView(input)
-            .setPositiveButton("Save") { _, _ ->
-                val pw = input.text.toString()
-                if (pw.isBlank()) {
-                    toast("Password khaali hai, kuch nahi badla")
-                } else {
-                    db.changePassword(id, pw)
-                    toast("Password badal gaya")
-                    render()
-                }
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
-    }
-
-    private fun editUsernameDialog(a: Account) {
-        val box = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(dp(20), dp(12), dp(20), dp(4))
-        }
-        val label = EditText(this).apply {
-            hint = "Label (jaise Instagram 1)"
-            setText(a.label)
-            inputType = InputType.TYPE_CLASS_TEXT
-        }
-        val user = EditText(this).apply {
-            hint = "Username / Email / Phone"
-            setText(a.username)
-            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
-        }
-        box.addView(label)
-        box.addView(user)
-        AlertDialog.Builder(this)
-            .setTitle("Edit Username / Label")
-            .setView(box)
-            .setPositiveButton("Save") { _, _ ->
-                val l = label.text.toString().trim().ifEmpty { a.label }
-                db.updateUsername(id, l, user.text.toString().trim())
-                toast("Save ho gaya")
-                render()
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
     }
 }
