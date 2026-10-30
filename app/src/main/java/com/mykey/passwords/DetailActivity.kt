@@ -144,7 +144,7 @@ class DetailActivity : Activity() {
         root.addView(b, LinearLayout.LayoutParams(-1, dp(52)))
     }
 
-    /** Galat likha password sudharna: history shift nahi hoti, date wahi rehti hai. */
+    /** Galat likha password sudhrna: history shift nahi hoti, date wahi rehti hai. */
     private fun fixDialog(key: String, fieldTitle: String, oldValue: String) {
         val input = EditText(this).apply {
             setText(oldValue)
