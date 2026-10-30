@@ -7,6 +7,8 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.text.InputType
 import android.text.method.PasswordTransformationMethod
@@ -26,15 +28,24 @@ class DetailActivity : Activity() {
     private val hidden = HashMap<String, Boolean>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Dark base theme (action bar aur dialogs ke liye)
+        setTheme(android.R.style.Theme_DeviceDefault)
         super.onCreate(savedInstanceState)
         db = Db(this)
         id = intent.getLongExtra("id", 0L)
 
+        window.decorView.setBackgroundColor(Theme.BG)
+        window.statusBarColor = Theme.BG
+        window.navigationBarColor = Theme.BG
+        actionBar?.setBackgroundDrawable(ColorDrawable(Theme.SURFACE))
+
         root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
+            setBackgroundColor(Theme.BG)
             setPadding(dp(16), dp(12), dp(16), dp(32))
         }
         val sv = ScrollView(this)
+        sv.setBackgroundColor(Theme.BG)
         sv.addView(root)
         setContentView(sv)
     }
@@ -62,11 +73,31 @@ class DetailActivity : Activity() {
         block("PREVIOUS PASSWORD 2", a.p2, "Changed on: ${fmtDate(a.p2Date)}", "p2")
     }
 
+    /** Button ko theme ka look dena. primary = gold, warna dark grey. */
+    private fun styleButton(b: Button, primary: Boolean) {
+        b.isAllCaps = false
+        b.setTextColor(if (primary) Color.BLACK else Theme.TEXT)
+        b.background = GradientDrawable().apply {
+            cornerRadius = dp(12).toFloat()
+            setColor(if (primary) Theme.ACCENT else Theme.SURFACE_HIGH)
+        }
+    }
+
+    private fun smallLp(): LinearLayout.LayoutParams =
+        LinearLayout.LayoutParams(0, dp(48), 1f).apply { setMargins(dp(3), dp(10), dp(3), 0) }
+
+    private fun dialog(): AlertDialog.Builder =
+        AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert)
+
     /** Ek field ka card: title, value, date, Copy button aur (password ho to) Hide/Show button. */
     private fun block(title: String, value: String, dateText: String, key: String?) {
         val card = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setBackgroundColor(Color.parseColor("#ECEFF1"))
+            background = GradientDrawable().apply {
+                cornerRadius = dp(16).toFloat()
+                setColor(Theme.SURFACE)
+                setStroke(dp(1), Theme.DIVIDER)
+            }
             setPadding(dp(14), dp(12), dp(14), dp(12))
         }
         val lp = LinearLayout.LayoutParams(-1, -2)
@@ -77,13 +108,13 @@ class DetailActivity : Activity() {
             text = title
             textSize = 12f
             setTypeface(null, Typeface.BOLD)
-            setTextColor(Color.parseColor("#546E7A"))
+            setTextColor(Theme.ACCENT)
         })
 
         val valueView = TextView(this).apply {
             text = if (value.isEmpty()) "-" else value
             textSize = 20f
-            setTextColor(Color.BLACK)
+            setTextColor(Theme.TEXT)
             setTextIsSelectable(true)
             setPadding(0, dp(6), 0, dp(2))
         }
@@ -92,7 +123,7 @@ class DetailActivity : Activity() {
         card.addView(TextView(this).apply {
             text = dateText
             textSize = 13f
-            setTextColor(Color.DKGRAY)
+            setTextColor(Theme.TEXT_DIM)
         })
 
         val buttons = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
@@ -109,10 +140,12 @@ class DetailActivity : Activity() {
                 }
             }
         }
-        buttons.addView(copy, LinearLayout.LayoutParams(0, dp(48), 1f))
+        styleButton(copy, false)
+        buttons.addView(copy, smallLp())
 
         if (key != null) {
             val eye = Button(this)
+            styleButton(eye, false)
             fun refreshEye() {
                 val h = hidden[key] == true
                 valueView.transformationMethod = if (h) PasswordTransformationMethod.getInstance() else null
@@ -123,13 +156,14 @@ class DetailActivity : Activity() {
                 refreshEye()
             }
             refreshEye()
-            buttons.addView(eye, LinearLayout.LayoutParams(0, dp(48), 1f))
+            buttons.addView(eye, smallLp())
 
             val fix = Button(this).apply {
                 text = "Fix"
                 setOnClickListener { fixDialog(key, title, value) }
             }
-            buttons.addView(fix, LinearLayout.LayoutParams(0, dp(48), 1f))
+            styleButton(fix, false)
+            buttons.addView(fix, smallLp())
         }
         card.addView(buttons)
         root.addView(card)
@@ -141,7 +175,8 @@ class DetailActivity : Activity() {
             textSize = 16f
             setOnClickListener { onClick() }
         }
-        root.addView(b, LinearLayout.LayoutParams(-1, dp(52)))
+        styleButton(b, true)
+        root.addView(b, LinearLayout.LayoutParams(-1, dp(52)).apply { topMargin = dp(12) })
     }
 
     /** Galat likha password sudhrna: history shift nahi hoti, date wahi rehti hai. */
@@ -152,7 +187,7 @@ class DetailActivity : Activity() {
             inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
             setPadding(dp(20), dp(16), dp(20), dp(16))
         }
-        AlertDialog.Builder(this)
+        dialog()
             .setTitle("Fix: $fieldTitle")
             .setMessage("Sirf galti sudharne ke liye. Date aur history waisi hi rahegi.")
             .setView(input)
@@ -171,7 +206,7 @@ class DetailActivity : Activity() {
             inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
             setPadding(dp(20), dp(16), dp(20), dp(16))
         }
-        AlertDialog.Builder(this)
+        dialog()
             .setTitle("Edit Password")
             .setMessage("Purana current password, Previous 1 ban jayega aur Previous 1, Previous 2.")
             .setView(input)
@@ -206,7 +241,7 @@ class DetailActivity : Activity() {
         }
         box.addView(label)
         box.addView(user)
-        AlertDialog.Builder(this)
+        dialog()
             .setTitle("Edit Username / Label")
             .setView(box)
             .setPositiveButton("Save") { _, _ ->
