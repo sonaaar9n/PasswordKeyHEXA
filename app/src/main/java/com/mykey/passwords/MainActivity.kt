@@ -7,6 +7,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Typeface
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
@@ -26,18 +28,32 @@ class MainActivity : Activity() {
     private var pendingBackup = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Dark base theme (action bar aur dialogs ke liye)
+        setTheme(android.R.style.Theme_DeviceDefault)
         super.onCreate(savedInstanceState)
         db = Db(this)
         title = "Password Key"
 
+        window.decorView.setBackgroundColor(Theme.BG)
+        window.statusBarColor = Theme.BG
+        window.navigationBarColor = Theme.BG
+        actionBar?.setBackgroundDrawable(ColorDrawable(Theme.SURFACE))
+
         val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
+            setBackgroundColor(Theme.BG)
             setPadding(dp(12), dp(12), dp(12), dp(24))
         }
 
         val backupBtn = Button(this).apply {
             text = "Backup (Excel / PDF)"
             textSize = 16f
+            isAllCaps = false
+            setTextColor(Color.BLACK)
+            background = GradientDrawable().apply {
+                cornerRadius = dp(12).toFloat()
+                setColor(Theme.ACCENT)
+            }
             setOnClickListener { chooseBackup() }
         }
         root.addView(backupBtn, LinearLayout.LayoutParams(-1, dp(56)))
@@ -46,6 +62,7 @@ class MainActivity : Activity() {
         root.addView(list)
 
         val sv = ScrollView(this)
+        sv.setBackgroundColor(Theme.BG)
         sv.addView(root)
         setContentView(sv)
     }
@@ -54,6 +71,9 @@ class MainActivity : Activity() {
         super.onResume()
         render()
     }
+
+    private fun dialog(): AlertDialog.Builder =
+        AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert)
 
     private fun render() {
         list.removeAllViews()
@@ -65,7 +85,7 @@ class MainActivity : Activity() {
                     text = a.platform.uppercase()
                     textSize = 15f
                     setTypeface(null, Typeface.BOLD)
-                    setTextColor(Color.parseColor("#37474F"))
+                    setTextColor(Theme.ACCENT)
                     setPadding(dp(4), dp(20), 0, dp(6))
                 }
                 list.addView(h)
@@ -77,7 +97,11 @@ class MainActivity : Activity() {
     private fun row(a: Account): View {
         val box = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setBackgroundColor(Color.parseColor("#ECEFF1"))
+            background = GradientDrawable().apply {
+                cornerRadius = dp(16).toFloat()
+                setColor(Theme.SURFACE)
+                setStroke(dp(1), Theme.DIVIDER)
+            }
             setPadding(dp(14), dp(12), dp(14), dp(12))
             gravity = Gravity.CENTER_VERTICAL
         }
@@ -85,12 +109,12 @@ class MainActivity : Activity() {
             text = a.label
             textSize = 18f
             setTypeface(null, Typeface.BOLD)
-            setTextColor(Color.BLACK)
+            setTextColor(Theme.TEXT)
         }
         val user = TextView(this).apply {
             text = if (a.username.isEmpty()) "(username set nahi)" else a.username
             textSize = 14f
-            setTextColor(Color.DKGRAY)
+            setTextColor(Theme.TEXT_DIM)
         }
         box.addView(name)
         box.addView(user)
@@ -98,7 +122,7 @@ class MainActivity : Activity() {
             startActivity(Intent(this, DetailActivity::class.java).putExtra("id", a.id))
         }
         val lp = LinearLayout.LayoutParams(-1, -2)
-        lp.bottomMargin = dp(6)
+        lp.bottomMargin = dp(8)
         box.layoutParams = lp
         return box
     }
@@ -106,7 +130,7 @@ class MainActivity : Activity() {
     // ---------- Backup ----------
 
     private fun chooseBackup() {
-        AlertDialog.Builder(this)
+        dialog()
             .setTitle("Backup kaise save karu?")
             .setItems(arrayOf("Excel (.xlsx)", "PDF")) { _, which -> startBackup(which) }
             .show()
@@ -147,7 +171,7 @@ class MainActivity : Activity() {
                     Exporter.pdf(accounts, it)
                 }
             }
-            AlertDialog.Builder(this)
+            dialog()
                 .setTitle("Backup ban gaya")
                 .setMessage("Yahan save hua:\n$path")
                 .setPositiveButton("OK", null)
