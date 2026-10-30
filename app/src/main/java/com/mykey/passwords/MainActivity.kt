@@ -11,9 +11,14 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.InputType
+import android.text.TextWatcher
 import android.view.Gravity
 import android.view.View
+import android.view.WindowManager
 import android.widget.Button
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
@@ -26,6 +31,7 @@ class MainActivity : Activity() {
     private lateinit var db: Db
     private lateinit var list: LinearLayout
     private var pendingBackup = -1
+    private var query = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Dark base theme (action bar aur dialogs ke liye)
@@ -37,14 +43,17 @@ class MainActivity : Activity() {
         window.decorView.setBackgroundColor(Theme.BG)
         window.statusBarColor = Theme.BG
         window.navigationBarColor = Theme.BG
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
         actionBar?.setBackgroundDrawable(ColorDrawable(Theme.SURFACE))
 
         val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setBackgroundColor(Theme.BG)
             setPadding(dp(12), dp(12), dp(12), dp(24))
+            isFocusableInTouchMode = true
         }
 
+        // Backup button (pehle jaisa, apni jagah par)
         val backupBtn = Button(this).apply {
             text = "Backup (Excel / PDF)"
             textSize = 16f
@@ -58,6 +67,31 @@ class MainActivity : Activity() {
         }
         root.addView(backupBtn, LinearLayout.LayoutParams(-1, dp(56)))
 
+        // Search box (backup button ke neeche)
+        val search = EditText(this).apply {
+            hint = "Search (platform, label, username)"
+            setHintTextColor(Theme.TEXT_DIM)
+            setTextColor(Theme.TEXT)
+            textSize = 16f
+            isSingleLine = true
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+            setPadding(dp(16), 0, dp(16), 0)
+            background = GradientDrawable().apply {
+                cornerRadius = dp(12).toFloat()
+                setColor(Theme.SURFACE)
+                setStroke(dp(1), Theme.DIVIDER)
+            }
+            addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, st: Int, c: Int, a: Int) {}
+                override fun onTextChanged(s: CharSequence?, st: Int, b: Int, c: Int) {}
+                override fun afterTextChanged(s: Editable?) {
+                    query = s?.toString() ?: ""
+                    render()
+                }
+            })
+        }
+        root.addView(search, LinearLayout.LayoutParams(-1, dp(48)).apply { topMargin = dp(12) })
+
         list = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         root.addView(list)
 
@@ -65,6 +99,7 @@ class MainActivity : Activity() {
         sv.setBackgroundColor(Theme.BG)
         sv.addView(root)
         setContentView(sv)
+        root.requestFocus()
     }
 
     override fun onResume() {
@@ -77,8 +112,17 @@ class MainActivity : Activity() {
 
     private fun render() {
         list.removeAllViews()
+        val q = query.trim().lowercase()
         var lastPlatform = ""
+        var shown = 0
         for (a in db.all()) {
+            // Search: platform, label ya username me match ho to dikhao (password me nahi dhundte)
+            if (q.isNotEmpty() &&
+                !(a.platform.lowercase().contains(q) ||
+                    a.label.lowercase().contains(q) ||
+                    a.username.lowercase().contains(q))
+            ) continue
+
             if (a.platform != lastPlatform) {
                 lastPlatform = a.platform
                 val h = TextView(this).apply {
@@ -91,6 +135,15 @@ class MainActivity : Activity() {
                 list.addView(h)
             }
             list.addView(row(a))
+            shown++
+        }
+        if (q.isNotEmpty() && shown == 0) {
+            list.addView(TextView(this).apply {
+                text = "Koi account nahi mila"
+                textSize = 15f
+                setTextColor(Theme.TEXT_DIM)
+                setPadding(dp(4), dp(24), 0, 0)
+            })
         }
     }
 
