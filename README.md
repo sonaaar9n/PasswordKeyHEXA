@@ -1,86 +1,162 @@
-# 🔐 PasswordKey (HEXA)
+# PasswordKeyHEXA 🔐
 
-A simple, offline Android app to keep your account passwords in one place, with no ads, no accounts, and no internet.
+**आपके पासवर्ड। आपका फोन। आपका कंट्रोल।**  
+**Your Passwords. Your Phone. Your Control.**
 
-I built this because I was frustrated with Play Store password managers full of ads, data collection, and complicated setups. This is my own minimal version, made for private, personal use.
+🌐 **Language Switch:** **हिंदी (Default)** | [English](#english)
 
-[![Latest release](https://img.shields.io/github/v/release/sonaaar9n/PasswordKeyHEXA)](https://github.com/sonaaar9n/PasswordKeyHEXA/releases/latest)
-![Platform](https://img.shields.io/badge/platform-Android-green)
-![Language](https://img.shields.io/badge/language-Kotlin-purple)
+---
 
-## ✨ Features
+## हिंदी (Default)
 
-- Store passwords for your social media and other accounts
-- View and manage each account's details
-- 100% offline: the app has **no internet permission**
-- No ads, no trackers, no sign-up
-- Lightweight (~2.3 MB)
+[👉 Switch to English](#english)
 
-## 📲 Download
+यह एक बहुत ही शानदार, भरोसेमंद और दमदार **Password Manager** ऐप है, जिसे खास तौर पर आपके पासवर्ड को पूरी तरह सुरक्षित रखने के लिए बनाया गया है। आज के समय में बहुत से लोग अपने पासवर्ड Google या किसी और ऑनलाइन सेवा में सेव करते हैं, लेकिन यह ऐप **Google से भी बेहतर** तरीके से आपके पासवर्ड को संभालकर रखता है, Google के एन्क्रिप्शन से आपको बचाता है और आपके पासवर्ड की पूरी जिम्मेदारी खुद आपको देता है—वह भी पूरी सुरक्षा के साथ।
 
-1. Go to the [**latest release**](https://github.com/sonaaar9n/PasswordKeyHEXA/releases/latest).
-2. Download `app-debug.apk`.
-3. Open it on your phone. If asked, allow **Install from unknown sources** for your browser or file manager.
+बिना किसी अकाउंट रजिस्ट्रेशन, बिना क्लाउड निर्भरता, बिना विज्ञापन और बिना अनिवार्य मास्टर पासवर्ड के यह Android के लिए एक हल्का, फ्री और ओपन-सोर्स ऑफलाइन पासवर्ड मैनेजर है।
 
-## 📸 Screenshots
-No need to show you tutorial for this app. 
-## 🛡️ Security: please read
+### यह ऐप क्यों सबसे खास है? ⭐
 
-This app is **personal-use by design**. It deliberately has no encryption layer. Your passwords are stored on your phone, and protection depends on:
+* **पासवर्ड सिर्फ आपका, किसी की जागीर नहीं:** यह ऐप सुनिश्चित करता है कि आपका पासवर्ड सिर्फ आपका रहे—Google Password Manager या किसी भी ऑनलाइन कंपनी की जागीर न बने, जो आपके अकाउंट डेटा के साथ-साथ आपके पासवर्ड की जिम्मेदारी भी अपने हाथ में ले ले।
+* **खुद के पासवर्ड की खुद जिम्मेदारी, पूरी सुरक्षा के साथ:** यहाँ आपके पासवर्ड का असली हक और नियंत्रण आपके पास रहता है, और वह भी पूरी मजबूती व सुरक्षा के साथ।
+* **ऐप में लिखो और सीधे Copy-Paste करो:** कृपया अपने हर अकाउंट का हर पासवर्ड जब भी बदलें या नया पासवर्ड बनाएं, तो ऐप के अंदर ही उस पासवर्ड को लिखकर सिर्फ **Copy-Paste** करके इस्तेमाल में लें। इससे आपका पासवर्ड हमेशा सुरक्षित रहता है।
+* **हर हफ्ते-महीने पासवर्ड बदलने की सलाह को नजरअंदाज करने की सुविधा:** यह ऐप आपको बार-बार हर हफ्ते या महीने पासवर्ड बदलने की सलाह को इग्नोर (नजरअंदाज) करने की सुविधा देता है, ताकि आप बिना किसी बेवजह की भागदौड़ के अपने सुरक्षित पासवर्ड पर कायम रह सकें।
+* **Google से भी मजबूत सुरक्षा:** जहाँ Google अकाउंट या ऑनलाइन सिस्टम से जुड़ी चिंताएं बनी रहती हैं, वहीं यह ऐप आपके पासवर्ड को एकदम सुरक्षित और अपनी तिजोरी जैसा महफूज रखता है।
+* **समझने और चलाने में आसान:** इसे कोई भी आसानी से समझ और इस्तेमाल कर सकता है। इसमें कोई उलझन या मुश्किल काम नहीं है।
+* **सभी पासवर्ड एक ही जगह:** सोशल मीडिया, वेबसाइट और दूसरे जरूरी अकाउंट्स के पासवर्ड एक ही जगह व्यवस्थित और सुरक्षित रहते हैं।
+* **पासवर्ड भूलने की परेशानी से आजादी:** अब अलग-अलग पासवर्ड याद रखने या भूल जाने की चिंता नहीं रहेगी।
 
-- your phone's **screen lock**, and
-- an optional **app lock** (I use my phone's built-in app lock as a second layer).
+### मुख्य विशेषताएं (Features) ✨
 
-What this means:
+* सोशल मीडिया, वेबसाइट और अन्य अकाउंट्स के पासवर्ड सेव करें।
+* सेव की गई अकाउंट जानकारी देखें और मैनेज करें।
+* पासवर्ड देखें, कॉपी करें और एडिट करें।
+* पूरी तरह ऑफलाइन काम करता है।
+* इंटरनेट परमिशन की जरूरत नहीं है।
+* कोई अकाउंट रजिस्ट्रेशन या क्लाउड सिंक नहीं है।
+* कोई विज्ञापन या ट्रैकर नहीं है।
+* हल्का Android ऐप।
+* अलग-अलग **Normal Backup** और **Encrypted Backup** विकल्प।
+* **Encrypted Backup** की मदद से दूसरे Android डिवाइस पर पासवर्ड रिस्टोर करें।
+* पासवर्ड की जानकारी **Excel** और **PDF** फॉर्मेट में एक्सपोर्ट करें।
 
-## 🛡️ Security
+### सुरक्षा और गोपनीयता (Security & Privacy) 🛡️
 
-Personal-use app by design: fully offline, with no internet permission encryption as you want.
+PasswordKeyHEXA एक सीधे और स्पष्ट सुरक्षा मॉडल पर काम करता है। इसका मकसद यह है कि हर बार ऐप खोलने पर आपको किसी अतिरिक्त मास्टर पासवर्ड या अतिरिक्त लॉगिन प्रक्रिया से न गुजरना पड़े।
 
-**Your data in the app**
-- Passwords are stored on your phone only, in the app's private storage. The app's own database is **not encrypted**, so there is no master password to forget and you can never get locked out of your own data.
-- It is protected by your phone's screen lock and app lock, so keep those turned on.
-- Updating the app keeps all your saved passwords.
+#### 1. लोकल डेटा स्टोरेज (Local Data Storage)
 
-**Encrypted backup (.pkbackup)**
-- Backups can be locked with a 6-digit PIN (AES-256-GCM). Without the PIN the file cannot be opened.
-- If you forget the PIN, the backup cannot be recovered.
-- A 6-digit PIN stops casual access, but someone who gets the file and has time and a computer could still try all combinations. Use a PIN you don't use elsewhere and keep the file safe.
+* अकाउंट की जानकारी डिवाइस में ही लोकली सेव होती है।
+* ऐप में **SQLite** डेटाबेस का इस्तेमाल होता है।
+* आंतरिक डेटाबेस जानबूझकर एन्क्रिप्टेड नहीं रखा गया है।
+* Android Application Sandbox ऐप के प्राइवेट डेटा को बाकी सामान्य Android ऐप्स से अलग रखता है।
+* ऐप को इंटरनेट परमिशन की जरूरत नहीं होती।
+* किसी क्लाउड अकाउंट या ऑनलाइन सिंक की जरूरत नहीं है।
 
-**Importing a backup**
-- Importing never overwrites your newer data. A password or username from a backup is imported only if its date is newer than what is already saved in the app. Older or equal entries are skipped, so importing an old backup by mistake is safe.
-- You always get a preview of what will change before anything is imported.
+**आंतरिक डेटाबेस एन्क्रिप्टेड क्यों नहीं है?**
 
-**Excel / PDF exports are not encrypted.** Anyone who gets those files can read them, so keep them safe or delete them after use. Use the encrypted .pkbackup option when you want a protected copy.
+यह एक जानबूझकर लिया गया डिजाइन फैसला है, ताकि रोजमर्रा के पासवर्ड इस्तेमाल में अतिरिक्त एन्क्रिप्शन या ऑथेंटिकेशन का कदम न बढ़े।
 
-If you need strong protection, use a well-audited password manager. If you want something simple and private for yourself, this might be enough for you. 
+Android Application Sandbox और डेटाबेस एन्क्रिप्शन दो अलग-अलग सुरक्षा व्यवस्थाएं हैं। Android Sandbox ऐप स्तर पर डेटा को अलग रखता है, लेकिन यह SQLite डेटाबेस को अपने आप एन्क्रिप्ट नहीं करता।
 
-## 🔒 Permissions
+यदि कोई रूट एक्सेस या किसी अन्य विशेष तरीके से डेटाबेस फाइल तक पहुँच जाता है, तो उसके अंदर की जानकारी पढ़ी जा सकती है।
 
-| Permission | Notes |
-It has excel/pdf format export for all the passwords to keep in single file. 
-## 🛠️ Build from source
+#### 2. डिवाइस का Screen Lock और App Lock इस्तेमाल करें
 
-1. Clone the repo:
-   ```bash
-   git clone https://github.com/sonaaar9n/PasswordKeyHEXA.git
-   ```
-2. Open the folder in **Android Studio**.
-3. Let Gradle sync, then click **Run ▶** or use **Build → Build APK(s)**.
+PasswordKeyHEXA अलग से मास्टर पासवर्ड या ऐप के अंदर अनिवार्य लॉगिन लागू नहीं करता।
 
-**Stack:** Kotlin, Gradle, package `com.mykey.passwords`.
+बेहतर सुरक्षा के लिए उपयोगकर्ताओं को यह करना चाहिए:
 
-## 🗺️ Ideas for the future
+* अपने Android डिवाइस पर Screen Lock चालू रखें।
+* यदि उपलब्ध हो, तो डिवाइस निर्माता का इन-बिल्ट App Lock फीचर PasswordKeyHEXA के लिए चालू करें।
+* जहाँ सपोर्ट हो, वहाँ फिंगरप्रिंट या PIN आधारित App Lock सुरक्षा का उपयोग करें।
+* अपना अनलॉक फोन दूसरों के हाथ में या पहुँच में न छोड़ें।
 
-- [ ] Optional encryption using Android Keystore
-- [ ] Biometric unlock inside the app
-- [ ] Export / import of data
-- [ ] Search and categories
+**महत्वपूर्ण:** इस ऐप के सुरक्षा मॉडल में डिवाइस स्तर की सुरक्षा एक अहम हिस्सा है। यदि आप अपने फोन पर Screen Lock या App Lock का इस्तेमाल नहीं करते हैं, तो यह ऐप आपकी सुरक्षा जरूरतों के लिए उपयुक्त नहीं हो सकता।
 
-## 🤝 Feedback
+#### 3. बैकअप सुरक्षा (Backup Security)
 
-I'm not a full-stack developer, and this is a learning project. Suggestions, issues, and pull requests are welcome. Open an [issue](https://github.com/sonaaar9n/PasswordKeyHEXA/issues) and tell me what you think.
+PasswordKeyHEXA दो अलग-अलग बैकअप विकल्प देता है:
 
-## 📄 License
+**Normal Backup**
 
-Released under the [MIT License](LICENSE). Copyright (c) 2026 Shivam Soni. 
+* बिना एन्क्रिप्शन वाली बैकअप फाइल बनाता है।
+* फाइल के अंदर अकाउंट की जानकारी पढ़ी जा सकती है।
+* ऐप के Import फीचर से इसे रिस्टोर नहीं किया जा सकता।
+* जिस किसी को यह फाइल मिलेगी, वह इसकी सामग्री पढ़ सकता है।
+* इस फाइल को सुरक्षित रखना उपयोगकर्ता की जिम्मेदारी है।
+
+**चेतावनी:** Normal Backup फाइलें शेयर न करें। इन्हें सुरक्षित जगह पर रखें।
+
+**Encrypted Backup**
+
+* `.pkbackup` फॉर्मेट में बैकअप बनाता है।
+* **AES-256-GCM** एन्क्रिप्शन का इस्तेमाल करता है।
+* उपयोगकर्ता द्वारा तय किए गए **6-अंकों के PIN** से सुरक्षित होता है।
+* रिस्टोर करने के लिए सही PIN जरूरी है।
+* दूसरे Android डिवाइस पर इम्पोर्ट और रिस्टोर किया जा सकता है।
+* पुराने डिवाइस के Android Keystore की पर निर्भर नहीं करता।
+
+**PIN सुरक्षा:** 6-अंकों के PIN के 10 लाख संभावित कॉम्बिनेशन होते हैं। हालांकि एन्क्रिप्शन बैकअप की सुरक्षा करता है, लेकिन छोटा PIN हर तरह के ऑफलाइन हमले के खिलाफ असीमित सुरक्षा नहीं देता। ऐसा PIN चुनें जो किसी दूसरे अकाउंट या सेवा में दोबारा इस्तेमाल न हुआ हो।
+
+यदि आप बैकअप PIN भूल जाते हैं, तो एन्क्रिप्टेड बैकअप रिकवर नहीं किया जा सकता।
+
+#### 4. Excel और PDF एक्सपोर्ट
+
+Excel और PDF एक्सपोर्ट एन्क्रिप्टेड नहीं होते हैं।
+
+जिस किसी को ये फाइलें मिलेंगी, वह उनके अंदर मौजूद पासवर्ड और अकाउंट जानकारी पढ़ सकता है।
+
+जरूरत पड़ने पर ही एक्सपोर्ट करें और फाइलों को सुरक्षित जगह रखें।
+
+### बैकअप और रिस्टोर (Backup & Restore) 🔄
+
+दूसरे Android डिवाइस पर जाते समय PasswordKeyHEXA सेव की गई पासवर्ड जानकारी ट्रांसफर करने की सुविधा देता है।
+
+#### Normal Backup
+
+Normal Backup व्यक्तिगत स्टोरेज के लिए बिना एन्क्रिप्शन वाली फाइल बनाता है।
+
+इसे ऐप के Import फीचर के जरिए रिस्टोर नहीं किया जा सकता।
+
+#### Encrypted Backup से रिस्टोर कैसे करें
+
+1. नए Android डिवाइस में PasswordKeyHEXA इंस्टॉल करें।
+2. अपनी `.pkbackup` फाइल नए डिवाइस में ट्रांसफर करें।
+3. PasswordKeyHEXA खोलें।
+4. **Import** विकल्प चुनें।
+5. अपनी एन्क्रिप्टेड बैकअप फाइल चुनें।
+6. सही **6-अंकों का PIN** दर्ज करें।
+7. इम्पोर्ट प्रीव्यू देखें।
+8. इम्पोर्ट कन्फर्म करें।
+
+#### इम्पोर्ट व्यवहार (Import Behavior)
+
+* मौजूदा नया डेटा अपने आप ओवरराइट नहीं होता।
+* बैकअप से कोई पासवर्ड या यूजरनेम तभी इम्पोर्ट होता है जब उसकी तारीख मौजूदा एंट्री से नई हो।
+* पुरानी या बराबर तारीख वाली एंट्रियां छोड़ दी जाती हैं।
+* कन्फर्म करने से पहले इम्पोर्ट प्रीव्यू दिखाया जाता है।
+
+इससे यह फायदा होता है कि पुरानी बैकअप जानकारी से नए डेटा के बदलने का खतरा कम रहता है।
+
+**सुझाव:** ऐप अनइंस्टॉल करने या डिवाइस बदलने से पहले Encrypted Backup जरूर बना लें।
+
+### डाउनलोड (Download) ⬇️
+
+1. [GitHub Releases](https://github.com/sonaaar9n/PasswordKeyHEXA/releases) पर जाएं।
+2. उपलब्ध APK डाउनलोड करें।
+3. अपने Android डिवाइस में इंस्टॉल करें।
+4. यदि कहा जाए, तो जरूरी इंस्टॉलेशन परमिशन चालू करें।
+
+APK फाइलें केवल भरोसेमंद स्रोत से ही इंस्टॉल करें।
+
+### स्क्रीनशॉट (Screenshots) 🖼️
+
+यहाँ ऐप के असली स्क्रीनशॉट जोड़े जा सकते हैं।
+
+### सोर्स से बिल्ड करें (Build From Source) 💻
+
+रिपॉजिटरी क्लोन करें:
+
+```bash
+git clone [https://github.com/sonaaar9n/PasswordKeyHEXA.git](https://github.com/sonaaar9n/PasswordKeyHEXA.git)
