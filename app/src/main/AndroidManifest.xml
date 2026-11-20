@@ -9,7 +9,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="PassKeyHEXA"
-        android:theme="@android:style/Theme.Material.Light.DarkActionBar">
+        android:theme="@style/NothingTheme">
 
         <activity
             android:name=".MainActivity"
