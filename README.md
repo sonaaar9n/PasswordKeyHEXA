@@ -35,8 +35,25 @@ What this means:
 
 ## 🛡️ Security
 
-Personal-use app by design: fully offline, no encryption. Your data stays on your phone and is protected by your phone's screen lock and app lock. Exported Excel/PDF files are not encrypted either, so keep them safe. 
-If you need strong protection, use a well-audited password manager. If you want something simple and private for yourself, this might be enough for you.
+Personal-use app by design: fully offline, with no internet permission encryption as you want.
+
+**Your data in the app**
+- Passwords are stored on your phone only, in the app's private storage. The app's own database is **not encrypted**, so there is no master password to forget and you can never get locked out of your own data.
+- It is protected by your phone's screen lock and app lock, so keep those turned on.
+- Updating the app keeps all your saved passwords.
+
+**Encrypted backup (.pkbackup)**
+- Backups can be locked with a 6-digit PIN (AES-256-GCM). Without the PIN the file cannot be opened.
+- If you forget the PIN, the backup cannot be recovered.
+- A 6-digit PIN stops casual access, but someone who gets the file and has time and a computer could still try all combinations. Use a PIN you don't use elsewhere and keep the file safe.
+
+**Importing a backup**
+- Importing never overwrites your newer data. A password or username from a backup is imported only if its date is newer than what is already saved in the app. Older or equal entries are skipped, so importing an old backup by mistake is safe.
+- You always get a preview of what will change before anything is imported.
+
+**Excel / PDF exports are not encrypted.** Anyone who gets those files can read them, so keep them safe or delete them after use. Use the encrypted .pkbackup option when you want a protected copy.
+
+If you need strong protection, use a well-audited password manager. If you want something simple and private for yourself, this might be enough for you. 
 
 ## 🔒 Permissions
 
