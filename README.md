@@ -3,13 +3,15 @@
 **आपके पासवर्ड। आपका फोन। आपका कंट्रोल।**  
 **Your Passwords. Your Phone. Your Control.**
 
-🌐 **Language Switch:** **हिंदी (Default)** | [English](#english)
+🌐 **Language Switch:** [हिंदी (Default)](#hindi-section) | [English](#english-section)
 
 ---
 
+<a id="hindi-section"></a>
+
 ## हिंदी (Default)
 
-[👉 Switch to English](#english)
+[👉 Switch to English](#english-section)
 
 यह एक बहुत ही शानदार, भरोसेमंद और दमदार **Password Manager** ऐप है, जिसे खास तौर पर आपके पासवर्ड को पूरी तरह सुरक्षित रखने के लिए बनाया गया है। आज के समय में बहुत से लोग अपने पासवर्ड Google या किसी और ऑनलाइन सेवा में सेव करते हैं, लेकिन यह ऐप **Google से भी बेहतर** तरीके से आपके पासवर्ड को संभालकर रखता है, Google के एन्क्रिप्शन से आपको बचाता है और आपके पासवर्ड की पूरी जिम्मेदारी खुद आपको देता है—वह भी पूरी सुरक्षा के साथ।
 
