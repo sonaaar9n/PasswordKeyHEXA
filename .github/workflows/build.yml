@@ -10,6 +10,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # theme.zip repo me ho to usko unzip karke files apni jagah daal do (purani replace, nayi add)
+      - name: Apply theme.zip
+        run: |
+          if [ -f theme.zip ]; then
+            unzip -o theme.zip
+            echo "theme.zip applied"
+          else
+            echo "theme.zip nahi mila, skip"
+          fi
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
